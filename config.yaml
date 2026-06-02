@@ -1,0 +1,46 @@
+# rtsp_trt pipeline config — source of truth
+# stream count auto-sets batch-size; add/remove entries under `streams` to scale.
+
+# true  = tiled OpenCV window with boxes + FPS overlay (debug)
+# false = headless: no display, just console stats. Max throughput.
+display: true
+
+model:
+  engine: /home/omar/luna/rtsp_trt/models/yolov12m-face.engine
+  input_width: 640
+  input_height: 640
+  # Max batch the engine was built for (trtexec --maxShapes). Pipeline warns
+  # if you list more streams than this — rebuild the engine if you do.
+  engine_max_batch: 10
+
+detection:
+  conf_threshold: 0.50
+  nms_threshold: 0.45
+
+# Add or remove entries freely. Everything else adapts.
+# Supports: bare paths (/path/to/file.mp4), file:// URIs, rtsp:// URIs
+streams:
+  - /home/omar/luna/rtsp_trt/streams/test1.mp4
+  - /home/omar/luna/rtsp_trt/streams/test2.mp4
+  - /home/omar/luna/rtsp_trt/streams/test3.mp4
+  - /home/omar/luna/rtsp_trt/streams/test4.mp4
+  # RTSP examples:
+  # - rtsp://admin:pass@192.168.1.100/stream1
+  # - rtsp://192.168.1.101/live
+
+# Prefer hardware (NVDEC) decoder when available; false = software (avdec_h264).
+# decodebin auto-selects — this flag biases the ranking.
+hw_decode: true
+
+tiler:
+  columns: 2
+  cell_width: 640
+  cell_height: 360
+
+fps_window: 30   # frames averaged for the FPS readout
+
+# Spin-wait budget when collecting a batch (microseconds).
+# Mirrors nvstreammux batched_push_timeout: briefly waits for all streams to
+# contribute a frame so TRT always sees a full batch.
+# 3000 µs (3 ms) is a good default. Set to 0 to disable (greedy, no wait).
+batch_wait_us: 3000

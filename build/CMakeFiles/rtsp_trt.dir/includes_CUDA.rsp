@@ -1,0 +1,1 @@
+-I/home/omar/luna/rtsp_trt/src -I"/usr/include/gstreamer-1.0" -I"/usr/include/glib-2.0" -I"/usr/lib/x86_64-linux-gnu/glib-2.0/include" -I"/usr/include/orc-0.4" -isystem "/usr/local/cuda-12.6/targets/x86_64-linux/include" -isystem /usr/include/opencv4
