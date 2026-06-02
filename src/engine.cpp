@@ -83,13 +83,16 @@ Engine::Engine(const std::string& path) {
 }
 
 Engine::~Engine() {
+    for (auto& g : graphs_) cudaGraphExecDestroy(g.exec);
     cudaStreamDestroy(stream_);
     delete ctx_;
     delete engine_;
     delete runtime_;
 }
 
-bool Engine::submit(void* d_input, void* d_output, int batch) {
+// Plain enqueue path: set shape + addresses, then enqueueV3.  Used for partial
+// batches, for the warmup before capture, and whenever graphs are disabled.
+bool Engine::submit_enqueue(void* d_input, void* d_output, int batch) {
     if (dynamic_) {
         nvinfer1::Dims4 shape{batch, 3, in_h_, in_w_};
         if (!ctx_->setInputShape(in_name_.c_str(), shape)) {
@@ -108,6 +111,81 @@ bool Engine::submit(void* d_input, void* d_output, int batch) {
     if (!ctx_->enqueueV3(stream_)) {
         std::cerr << "[Engine] enqueueV3 failed\n";
         return false;
+    }
+    return true;
+}
+
+cudaGraphExec_t Engine::find_graph(void* in, void* out, int batch) const {
+    for (const auto& g : graphs_)
+        if (g.in == in && g.out == out && g.batch == batch)
+            return g.exec;
+    return nullptr;
+}
+
+bool Engine::submit(void* d_input, void* d_output, int batch) {
+    if (!use_graph_)
+        return submit_enqueue(d_input, d_output, batch);
+
+    // Fast path: a graph already exists for this exact (in, out, batch).
+    // The graph has shape + addresses baked in, so we skip all the
+    // setInputShape / setTensorAddress calls and replay in one launch.
+    if (cudaGraphExec_t exec = find_graph(d_input, d_output, batch)) {
+        if (cudaGraphLaunch(exec, stream_) != cudaSuccess) {
+            std::cerr << "[Engine] cudaGraphLaunch failed — disabling graphs\n";
+            use_graph_ = false;
+            return submit_enqueue(d_input, d_output, batch);
+        }
+        return true;
+    }
+
+    // First time for this key — set up, warm up, then capture into a graph.
+    // The warmup enqueue is REQUIRED: TensorRT may perform one-time setup work
+    // (autotuning, internal allocations) on the first enqueue after a shape or
+    // address change, which is not capturable.
+    if (!submit_enqueue(d_input, d_output, batch))
+        return false;
+    if (cudaStreamSynchronize(stream_) != cudaSuccess)
+        return false;
+
+    // Capture in ThreadLocal mode: the GStreamer callback threads run their own
+    // cudaMemcpyAsync/sync on separate streams concurrently — ThreadLocal keeps
+    // capture scoped to THIS thread so those calls are not flagged as illegal.
+    cudaGraph_t graph = nullptr;
+    if (cudaStreamBeginCapture(stream_, cudaStreamCaptureModeThreadLocal) != cudaSuccess) {
+        std::cerr << "[Engine] beginCapture failed — disabling graphs\n";
+        use_graph_ = false;
+        return submit_enqueue(d_input, d_output, batch);
+    }
+
+    bool enq_ok = ctx_->enqueueV3(stream_);
+
+    cudaError_t cap = cudaStreamEndCapture(stream_, &graph);
+    if (!enq_ok || cap != cudaSuccess || !graph) {
+        std::cerr << "[Engine] capture failed — disabling graphs\n";
+        if (graph) cudaGraphDestroy(graph);
+        use_graph_ = false;
+        // The failed capture leaves nothing queued; run a normal inference so
+        // this batch still produces output.
+        return submit_enqueue(d_input, d_output, batch);
+    }
+
+    cudaGraphExec_t exec = nullptr;
+    cudaError_t inst = cudaGraphInstantiate(&exec, graph, 0);
+    cudaGraphDestroy(graph);
+    if (inst != cudaSuccess || !exec) {
+        std::cerr << "[Engine] graph instantiate failed — disabling graphs\n";
+        use_graph_ = false;
+        return submit_enqueue(d_input, d_output, batch);
+    }
+
+    graphs_.push_back({d_input, d_output, batch, exec});
+    std::cout << "[Engine] captured CUDA graph (batch=" << batch
+              << ", " << graphs_.size() << " cached)\n";
+
+    // Launch the freshly captured graph so this iteration produces output too.
+    if (cudaGraphLaunch(exec, stream_) != cudaSuccess) {
+        use_graph_ = false;
+        return submit_enqueue(d_input, d_output, batch);
     }
     return true;
 }

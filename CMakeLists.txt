@@ -50,6 +50,7 @@ add_executable(rtsp_trt
     src/postprocess.cpp
     src/display.cpp
     src/preprocess.cu
+    src/postprocess_gpu.cu
 )
 
 target_include_directories(rtsp_trt PRIVATE

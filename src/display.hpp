@@ -3,11 +3,14 @@
 #include <vector>
 #include "postprocess.hpp"
 
-// Draw green bounding boxes and a status bar (stream ID, FPS, face count) in place.
-void draw_frame(cv::Mat& frame, int stream_id, float fps,
-                const std::vector<Detection>& dets);
-
-// Compose per-stream frames into a tiled canvas.
-// Frames that are empty (no frame received yet) are shown as dark grey.
-cv::Mat tile_frames(const std::vector<cv::Mat>& frames,
-                    int cols, int cell_w, int cell_h);
+// Draw one stream's overlay (green boxes + status label) directly onto its tile
+// within the shared canvas.  The canvas already holds the GPU-composited,
+// resized frames; this only adds the vector overlay on the CPU.
+//
+// Boxes are in original source-frame coordinates and are scaled to the cell:
+//   canvas_x = col*cell_w + box.x * (cell_w / src_w)
+//
+// stream_id doubles as the tile index (row = id/cols, col = id%cols).
+void draw_tile(cv::Mat& canvas, int stream_id, int cols,
+               int cell_w, int cell_h, int src_w, int src_h,
+               float fps, const std::vector<Detection>& dets);

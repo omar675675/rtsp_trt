@@ -674,4 +674,5 @@ CMakeFiles/rtsp_trt.dir/src/main.cpp.o: \
  /usr/include/gstreamer-1.0/gst/video/video-sei.h \
  /home/omar/luna/rtsp_trt/src/preprocess.cuh \
  /home/omar/luna/rtsp_trt/src/postprocess.hpp \
+ /home/omar/luna/rtsp_trt/src/postprocess_gpu.cuh \
  /home/omar/luna/rtsp_trt/src/display.hpp

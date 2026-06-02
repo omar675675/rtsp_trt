@@ -225,6 +225,30 @@ src/postprocess.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/postprocess.cpp.s
 .PHONY : src/postprocess.cpp.s
 
+src/postprocess_gpu.o: src/postprocess_gpu.cu.o
+.PHONY : src/postprocess_gpu.o
+
+# target to build an object file
+src/postprocess_gpu.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o
+.PHONY : src/postprocess_gpu.cu.o
+
+src/postprocess_gpu.i: src/postprocess_gpu.cu.i
+.PHONY : src/postprocess_gpu.i
+
+# target to preprocess a source file
+src/postprocess_gpu.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.i
+.PHONY : src/postprocess_gpu.cu.i
+
+src/postprocess_gpu.s: src/postprocess_gpu.cu.s
+.PHONY : src/postprocess_gpu.s
+
+# target to generate assembly for a file
+src/postprocess_gpu.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.s
+.PHONY : src/postprocess_gpu.cu.s
+
 src/preprocess.o: src/preprocess.cu.o
 .PHONY : src/preprocess.o
 
@@ -294,6 +318,9 @@ help:
 	@echo "... src/postprocess.o"
 	@echo "... src/postprocess.i"
 	@echo "... src/postprocess.s"
+	@echo "... src/postprocess_gpu.o"
+	@echo "... src/postprocess_gpu.i"
+	@echo "... src/postprocess_gpu.s"
 	@echo "... src/preprocess.o"
 	@echo "... src/preprocess.i"
 	@echo "... src/preprocess.s"

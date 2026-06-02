@@ -49,6 +49,58 @@ __global__ void letterbox_nv12_kernel(
     d_dst[2 * stride + idx] = b;
 }
 
+// ── NV12→BGR + resize + tile kernel (display compositor) ──────────────────────
+// One thread per output pixel of the destination cell.  Nearest-neighbour
+// downscale from the source frame + BT.601 YCbCr→BGR, written straight into the
+// shared canvas at the tile offset.  GPU equivalent of nvmultistreamtiler.
+
+__global__ void nv12_to_bgr_tile_kernel(
+    const uint8_t* __restrict__ d_y,   // Y  plane: src_h × src_w
+    const uint8_t* __restrict__ d_uv,  // UV plane: src_h/2 × src_w
+    int src_w, int src_h,
+    uint8_t* __restrict__ d_canvas, int canvas_w,
+    int dst_x, int dst_y, int cell_w, int cell_h)
+{
+    int cx = blockIdx.x * blockDim.x + threadIdx.x;
+    int cy = blockIdx.y * blockDim.y + threadIdx.y;
+    if (cx >= cell_w || cy >= cell_h) return;
+
+    // Nearest-neighbour map: cell pixel → source pixel
+    int sx = cx * src_w / cell_w; if (sx >= src_w) sx = src_w - 1;
+    int sy = cy * src_h / cell_h; if (sy >= src_h) sy = src_h - 1;
+
+    float Y  = (float)d_y[sy * src_w + sx] - 16.f;
+    int   uv = (sy >> 1) * src_w + (sx & ~1);
+    float U  = (float)d_uv[uv]     - 128.f;  // Cb
+    float V  = (float)d_uv[uv + 1] - 128.f;  // Cr
+
+    uint8_t b = (uint8_t)fminf(fmaxf(1.164f * Y + 2.018f * U             , 0.f), 255.f);
+    uint8_t g = (uint8_t)fminf(fmaxf(1.164f * Y - 0.391f * U - 0.813f * V, 0.f), 255.f);
+    uint8_t r = (uint8_t)fminf(fmaxf(1.164f * Y              + 1.596f * V, 0.f), 255.f);
+
+    int px = dst_x + cx, py = dst_y + cy;
+    int o  = (py * canvas_w + px) * 3;
+    d_canvas[o + 0] = b;
+    d_canvas[o + 1] = g;
+    d_canvas[o + 2] = r;
+}
+
+void nv12_to_bgr_tile_gpu(
+    const uint8_t* d_nv12, int src_w, int src_h,
+    uint8_t* d_canvas, int canvas_w,
+    int dst_x, int dst_y, int cell_w, int cell_h,
+    cudaStream_t stream)
+{
+    const uint8_t* d_uv = d_nv12 + (size_t)src_w * src_h;
+    dim3 block(16, 16);
+    dim3 grid((cell_w + 15) / 16, (cell_h + 15) / 16);
+    nv12_to_bgr_tile_kernel<<<grid, block, 0, stream>>>(
+        d_nv12, d_uv, src_w, src_h,
+        d_canvas, canvas_w, dst_x, dst_y, cell_w, cell_h);
+}
+
+// ── NV12→float RGB CHW letterbox (TRT input) ─────────────────────────────────
+
 void preprocess_frame(
     const uint8_t* d_nv12,
     int src_h, int src_w,

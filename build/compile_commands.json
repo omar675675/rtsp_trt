@@ -34,5 +34,11 @@
   "command": "/usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/rtsp_trt.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" --extended-lambda -use_fast_math -x cu -c /home/omar/luna/rtsp_trt/src/preprocess.cu -o CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o",
   "file": "/home/omar/luna/rtsp_trt/src/preprocess.cu",
   "output": "CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o"
+},
+{
+  "directory": "/home/omar/luna/rtsp_trt/build",
+  "command": "/usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/rtsp_trt.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" --extended-lambda -use_fast_math -x cu -c /home/omar/luna/rtsp_trt/src/postprocess_gpu.cu -o CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o",
+  "file": "/home/omar/luna/rtsp_trt/src/postprocess_gpu.cu",
+  "output": "CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o"
 }
 ]

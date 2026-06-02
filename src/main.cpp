@@ -1,19 +1,27 @@
 /*
  * rtsp_trt — multi-stream face detection pipeline
  *
- * Architecture matches nvinfer/nvstreammux internally:
+ * Hot-path summary (all GPU, no CPU pixel work, no sequential stalls):
  *
- *   nvh264dec → CUDAMemory NV12
- *       ↓  [non-blocking D2D copy in callback, copy_stream per stream]
- *   Pool buffer (our primary CUDA context, packed NV12)
- *       ↓  [letterbox + NV12→RGB kernel, per-stream non-blocking pre_stream]
- *   d_input[nxt]  ←── preprocess (concurrent with TRT on d_input[cur])
- *       ↓  [engine.submit → enqueueV3 async]
- *   TRT inference
- *       ↓  [engine.wait → cudaStreamSynchronize]
- *   h_output ← cudaMemcpy  (before engine.submit(nxt) — null stream issue avoided)
- *       ↓
- *   CPU: decode_detections + NMS  (concurrent with new TRT inference)
+ *  ┌─ Phase 1 (concurrent with TRT inference on cur batch) ────────────────┐
+ *  │  collect_batch (spin ≤ batch_wait_us)                                 │
+ *  │  preprocess kernels    → d_input[nxt]   (pre_streams, non-blocking)   │
+ *  │  nv12_to_bgr kernels   → d_bgr_gpu[sid] (dl_stream,  non-blocking)   │
+ *  │  BGR download          → bgr_mats[sid]  (dl_stream,  non-blocking)   │
+ *  │  sync pre_streams + dl_stream                                         │
+ *  │  release pool buffers                                                 │
+ *  └───────────────────────────────────────────────────────────────────────┘
+ *
+ *  ┌─ Phase 2 ─────────────────────────────────────────────────────────────┐
+ *  │  engine.wait()                     TRT done, d_output[cur] ready      │
+ *  │  decode_detections_gpu  (post_stream, non-blocking)                   │
+ *  │    cudaMemcpyAsync counts + dets   (post_stream, pinned host)         │
+ *  │  engine.submit(nxt)                TRT restarts immediately           │
+ *  │  cudaStreamSynchronize(post_stream) ← ~0.1 ms, TRT still running     │
+ *  │  std::async NMS × batch_sz         (CPU threads, concurrent with TRT) │
+ *  │  join NMS futures + print stats                                       │
+ *  │  draw + tile + imshow + cv::pollKey (CPU, concurrent with TRT)        │
+ *  └───────────────────────────────────────────────────────────────────────┘
  */
 
 #include <iostream>
@@ -34,6 +42,7 @@
 #include "stream.hpp"
 #include "preprocess.cuh"
 #include "postprocess.hpp"
+#include "postprocess_gpu.cuh"
 #include "display.hpp"
 
 static std::atomic<bool> g_stop{false};
@@ -49,7 +58,7 @@ struct Config {
     std::vector<std::string> streams;
     int         tiler_cols, cell_w, cell_h;
     int         fps_window;
-    int         batch_wait_us;  // spin-wait budget when collecting a batch (µs)
+    int         batch_wait_us;
 };
 
 static Config load_config(const std::string& path) {
@@ -70,9 +79,6 @@ static Config load_config(const std::string& path) {
     c.cell_w           = y["tiler"]["cell_width"].as<int>(640);
     c.cell_h           = y["tiler"]["cell_height"].as<int>(360);
     c.fps_window       = y["fps_window"].as<int>(30);
-    // Equivalent to nvstreammux batched_push_timeout but far shorter: we just
-    // spin briefly to let all streams contribute to the batch before inferring.
-    // Default 3 ms.  Set to 0 to disable (greedy collect, like before).
     c.batch_wait_us    = y["batch_wait_us"].as<int>(3000);
     if (!y["streams"] || !y["streams"].IsSequence())
         throw std::runtime_error("No 'streams' list in config");
@@ -100,24 +106,17 @@ struct FpsTracker {
     }
 };
 
-// ── batch collection ──────────────────────────────────────────────────────────
-// Mirrors nvstreammux: spin briefly to give all streams a chance to contribute
-// a frame before we commit to the batch.  Ensures TRT always sees a full batch,
-// maximising GPU utilisation.  Once the deadline passes we take whatever we have.
+// ── batch collector ───────────────────────────────────────────────────────────
 
 static void collect_batch(
     const std::vector<std::unique_ptr<Stream>>& streams,
-    int n, int wait_us,
-    std::vector<Frame>& batch)
+    int n, int wait_us, std::vector<Frame>& batch)
 {
     batch.clear();
     batch.reserve(n);
-
     std::vector<bool> got(n, false);
-
     auto deadline = std::chrono::steady_clock::now()
                   + std::chrono::microseconds(wait_us);
-
     do {
         for (int i = 0; i < n; ++i) {
             if (got[i]) continue;
@@ -131,8 +130,6 @@ static void collect_batch(
         std::this_thread::yield();
     } while (std::chrono::steady_clock::now() < deadline);
 }
-
-// ── helpers ───────────────────────────────────────────────────────────────────
 
 static void sync_pre_streams(const std::vector<Frame>& batch, int n,
                               const std::vector<cudaStream_t>& streams)
@@ -161,8 +158,7 @@ int main(int argc, char** argv) {
 
     const int n = (int)cfg.streams.size();
     if (n > cfg.engine_max_batch)
-        std::cerr << "WARNING: " << n << " streams > engine max batch "
-                  << cfg.engine_max_batch << "\n";
+        std::cerr << "WARNING: " << n << " streams > engine max batch\n";
 
     std::cout << cfg_path << "  streams: " << n
               << "  display: " << cfg.display
@@ -173,33 +169,64 @@ int main(int argc, char** argv) {
     Engine engine(cfg.engine_path);
     const int net_h       = engine.input_h();
     const int net_w       = engine.input_w();
-    const int num_attrs   = engine.num_attrs();
     const int num_anchors = engine.num_anchors();
-    const int out_per_img = num_attrs * num_anchors;
+    const int out_per_img = engine.num_attrs() * num_anchors;
 
-    // Double-buffered GPU I/O — while TRT runs on buf[cur], we preprocess into buf[nxt].
-    float* d_input[2]  = {nullptr, nullptr};
-    float* d_output[2] = {nullptr, nullptr};
+    // ── GPU buffers ───────────────────────────────────────────────────────────
+
+    // Double-buffered TRT I/O
+    float* d_input[2]  = {};
+    float* d_output[2] = {};
     for (int i = 0; i < 2; ++i) {
         cudaMalloc(&d_input[i],  (size_t)n * 3 * net_h * net_w * sizeof(float));
         cudaMalloc(&d_output[i], (size_t)n * out_per_img        * sizeof(float));
     }
-    std::vector<float> h_output[2];
-    h_output[0].resize((size_t)n * out_per_img);
-    h_output[1].resize((size_t)n * out_per_img);
 
-    // Per-stream preprocessing streams — non-blocking so they never serialise
-    // with TRT's engine stream or the null stream.
+    // GPU decode output (single — decoded after engine.wait, before submit)
+    Detection* d_dets_gpu  = nullptr;
+    int*       d_det_counts_gpu = nullptr;
+    cudaMalloc(&d_dets_gpu,       (size_t)n * MAX_DETS_PER_IMG * sizeof(Detection));
+    cudaMalloc(&d_det_counts_gpu, (size_t)n * sizeof(int));
+
+    // Pinned host memory for fast async D2H of decode results.
+    // Pinned = DMA-able by CUDA without staging copies.
+    int*       h_det_counts = nullptr;
+    Detection* h_dets_all   = nullptr;
+    cudaMallocHost(&h_det_counts, (size_t)n * sizeof(int));
+    cudaMallocHost(&h_dets_all,   (size_t)n * MAX_DETS_PER_IMG * sizeof(Detection));
+
+    // ── display compositor buffers ────────────────────────────────────────────
+    // The GPU composes all tiles into one canvas; we download only that canvas.
+    const int cols      = cfg.display ? std::max(1, std::min(cfg.tiler_cols, n)) : 0;
+    const int rows      = cfg.display ? (n + cols - 1) / cols : 0;
+    const int canvas_w  = cfg.display ? cols * cfg.cell_w : 0;
+    const int canvas_h  = cfg.display ? rows * cfg.cell_h : 0;
+
+    uint8_t* d_canvas = nullptr;            // GPU canvas (BGR HWC)
+    cv::Mat  h_canvas[2];                   // double-buffered host canvas
+    if (cfg.display) {
+        cudaMalloc(&d_canvas, (size_t)canvas_w * canvas_h * 3);
+        // Clear once to dark grey; cells for live streams are overwritten every
+        // frame, empty cells (partial last row) stay grey.
+        cudaMemset(d_canvas, 30, (size_t)canvas_w * canvas_h * 3);
+        h_canvas[0].create(canvas_h, canvas_w, CV_8UC3);
+        h_canvas[1].create(canvas_h, canvas_w, CV_8UC3);
+    }
+
+    // ── CUDA streams ──────────────────────────────────────────────────────────
+    // All non-blocking so they never serialise with each other or the null stream.
+
     std::vector<cudaStream_t> pre_streams(n);
     for (int i = 0; i < n; ++i)
         cudaStreamCreateWithFlags(&pre_streams[i], cudaStreamNonBlocking);
 
-    // Non-blocking stream for display downloads.
-    cudaStream_t dl_stream = nullptr;
-    if (cfg.display)
-        cudaStreamCreateWithFlags(&dl_stream, cudaStreamNonBlocking);
+    cudaStream_t dl_stream   = nullptr;   // display D2H
+    cudaStream_t post_stream = nullptr;   // GPU decode + tiny D2H
+    cudaStreamCreateWithFlags(&dl_stream,   cudaStreamNonBlocking);
+    cudaStreamCreateWithFlags(&post_stream, cudaStreamNonBlocking);
 
-    // GStreamer decode pipelines.
+    // ── GStreamer pipelines ───────────────────────────────────────────────────
+
     std::vector<std::unique_ptr<Stream>> streams;
     streams.reserve(n);
     for (int i = 0; i < n; ++i)
@@ -209,30 +236,29 @@ int main(int argc, char** argv) {
             std::cerr << "Failed to start stream " << s->id() << "\n"; return 1;
         }
 
+    // ── per-stream bookkeeping ────────────────────────────────────────────────
+
     std::vector<FpsTracker>             fps_trackers(n, FpsTracker(cfg.fps_window));
     std::vector<std::vector<Detection>> last_dets(n);
     std::vector<LetterboxInfo>          lb_infos(n);
 
-    // Display buffers — only allocated when display=true.
-    std::vector<cv::Mat> nv12_mats(cfg.display ? n : 0);
-    std::vector<cv::Mat> bgr_mats(cfg.display ? n : 0);
-
     std::cout << "Running — Ctrl+C to stop\n";
+
+    // ── pipeline state ────────────────────────────────────────────────────────
 
     int  cur    = 0;
     bool primed = false;
     std::vector<Frame> cur_batch;
     int                cur_sz = 0;
 
+    // ── main loop ─────────────────────────────────────────────────────────────
     while (!g_stop) {
         for (auto& s : streams) s->poll_bus();
 
         const int nxt = 1 - cur;
 
         // ── Phase 1: collect + preprocess NEXT batch ──────────────────────────
-        // Runs concurrently with TRT inference for cur_batch (if primed).
-        // Pool buffers are in our primary CUDA context — same as TRT — so the
-        // preprocess kernel has no cross-context overhead.
+        // Runs fully concurrent with TRT inference (if primed).
 
         std::vector<Frame> nxt_batch;
         collect_batch(streams, n, cfg.batch_wait_us, nxt_batch);
@@ -241,6 +267,7 @@ int main(int argc, char** argv) {
         if (have_nxt) {
             const int nxt_sz = (int)nxt_batch.size();
 
+            // Preprocess kernels (non-blocking pre_streams)
             for (int b = 0; b < nxt_sz; ++b) {
                 const int sid  = nxt_batch[b].stream_id;
                 float*    slot = d_input[nxt] + (size_t)b * 3 * net_h * net_w;
@@ -248,93 +275,129 @@ int main(int argc, char** argv) {
                     nxt_batch[b].d_nv12,
                     nxt_batch[b].src_h, nxt_batch[b].src_w,
                     slot, net_h, net_w,
-                    lb_infos[sid],
-                    pre_streams[sid]);
+                    lb_infos[sid], pre_streams[sid]);
             }
 
-            sync_pre_streams(nxt_batch, n, pre_streams);
-
-            // Display: download packed NV12 from pool buffer on non-blocking dl_stream.
-            // Concurrent with TRT inference on cur batch.
+            // GPU display compositor (dl_stream, non-blocking): each stream's
+            // frame is resized + colour-converted + placed into its tile of the
+            // shared GPU canvas.  Only the single composed canvas is downloaded —
+            // not N full-resolution frames.  Written into h_canvas[nxt] so it
+            // pairs with this batch's detections one iteration later (Phase 2
+            // displays h_canvas[cur], keeping image and boxes in sync).
             if (cfg.display) {
                 for (int b = 0; b < nxt_sz; ++b) {
                     const int sid = nxt_batch[b].stream_id;
-                    const int W   = nxt_batch[b].src_w;
-                    const int H   = nxt_batch[b].src_h;
-                    cv::Mat& nvm  = nv12_mats[sid];
-                    if (nvm.empty()) nvm.create(H * 3 / 2, W, CV_8UC1);
-                    // Pool buffer is packed (stride == W) — single contiguous copy.
-                    cudaMemcpyAsync(nvm.data, nxt_batch[b].d_nv12,
-                                    (size_t)W * H * 3 / 2,
-                                    cudaMemcpyDeviceToHost, dl_stream);
+                    const int col = sid % cols, row = sid / cols;
+                    nv12_to_bgr_tile_gpu(
+                        nxt_batch[b].d_nv12, nxt_batch[b].src_w, nxt_batch[b].src_h,
+                        d_canvas, canvas_w,
+                        col * cfg.cell_w, row * cfg.cell_h,
+                        cfg.cell_w, cfg.cell_h,
+                        dl_stream);
                 }
-                cudaStreamSynchronize(dl_stream);
+                cudaMemcpyAsync(h_canvas[nxt].data, d_canvas,
+                                (size_t)canvas_w * canvas_h * 3,
+                                cudaMemcpyDeviceToHost, dl_stream);
             }
 
-            // Return pool buffers — preprocess kernels synced, display done.
+            // Sync preprocessing — kernels done, safe to release pool buffers
+            sync_pre_streams(nxt_batch, n, pre_streams);
+
+            // Sync display compositor + download
+            if (cfg.display)
+                cudaStreamSynchronize(dl_stream);
+
+            // Return pool NV12 buffers to streams
             for (auto& f : nxt_batch) {
                 streams[f.stream_id]->release_frame(f.d_nv12);
                 f.d_nv12 = nullptr;
             }
         }
 
-        // ── Phase 2: finish cur inference, download, submit nxt, then NMS ────
+        // ── Phase 2: finish cur inference, GPU decode, submit nxt, NMS ───────
 
         if (primed) {
             if (engine.wait() != cudaSuccess) {
-                std::cerr << "TRT sync failed\n";
-                continue;
+                std::cerr << "TRT sync failed\n"; continue;
             }
 
-            // Download BEFORE submitting the next batch.
-            // engine.stream_ is idle after wait() so the null stream doesn't
-            // block.  If we submitted first, the null stream cudaMemcpy would
-            // stall until the new inference finishes — negating the pipeline.
-            cudaMemcpy(h_output[cur].data(), d_output[cur],
-                       (size_t)cur_sz * out_per_img * sizeof(float),
-                       cudaMemcpyDeviceToHost);
+            // GPU decode: reset counts, launch decode kernels, then async copy
+            // the tiny results — all on post_stream (non-blocking).
+            cudaMemsetAsync(d_det_counts_gpu, 0,
+                            (size_t)cur_sz * sizeof(int), post_stream);
+            for (int b = 0; b < cur_sz; ++b) {
+                const int sid = cur_batch[b].stream_id;
+                decode_detections_gpu(
+                    d_output[cur] + (size_t)b * out_per_img,
+                    num_anchors, cfg.conf_thresh,
+                    lb_infos[sid],
+                    cur_batch[b].src_w, cur_batch[b].src_h,
+                    d_dets_gpu       + (size_t)b * MAX_DETS_PER_IMG,
+                    d_det_counts_gpu + b,
+                    post_stream);
+            }
+            // Async D2H of decode results on the same post_stream.
+            // Pinned host memory allows true async DMA — CPU does not block.
+            cudaMemcpyAsync(h_det_counts, d_det_counts_gpu,
+                            (size_t)cur_sz * sizeof(int),
+                            cudaMemcpyDeviceToHost, post_stream);
+            cudaMemcpyAsync(h_dets_all, d_dets_gpu,
+                            (size_t)cur_sz * MAX_DETS_PER_IMG * sizeof(Detection),
+                            cudaMemcpyDeviceToHost, post_stream);
 
-            // Restart TRT on the next batch immediately.
+            // Submit next inference — TRT restarts immediately.
+            // post_stream and engine.stream_ are both non-blocking-compatible:
+            // they run independently on the GPU.
             if (have_nxt)
                 engine.submit(d_input[nxt], d_output[nxt], (int)nxt_batch.size());
 
-            // NMS + stats — CPU work, runs concurrently with the new TRT above.
-            for (int b = 0; b < cur_sz; ++b) {
-                const int sid     = cur_batch[b].stream_id;
-                const auto& lb    = lb_infos[sid];
-                const float* base = h_output[cur].data() + (size_t)b * out_per_img;
+            // Wait for GPU decode + D2H (typically already done by now: ~0.1 ms).
+            // This is NOT the null stream so it does NOT block TRT.
+            cudaStreamSynchronize(post_stream);
 
-                auto dets = decode_detections(base, num_attrs, num_anchors,
-                                              cfg.conf_thresh, lb,
-                                              cur_batch[b].src_w, cur_batch[b].src_h);
-                dets = nms(std::move(dets), cfg.nms_thresh);
+            // NMS + stats — serial over the batch.
+            // GPU already did the heavy work (confidence filter + box decode), so
+            // each stream's NMS operates on only the handful of surviving boxes
+            // (~10 faces).  That's a few microseconds; spawning a thread per frame
+            // (std::async) costs more in thread-launch overhead than it saves, so
+            // a plain loop is faster here.  All work runs concurrently with the
+            // next TRT inference already submitted above.
+            for (int b = 0; b < cur_sz; ++b) {
+                const int sid = cur_batch[b].stream_id;
+                const int cnt = std::min(h_det_counts[b], MAX_DETS_PER_IMG);
+                const Detection* src = h_dets_all + (size_t)b * MAX_DETS_PER_IMG;
+                std::vector<Detection> dets(src, src + cnt);
 
                 fps_trackers[sid].tick();
-                last_dets[sid] = std::move(dets);
+                last_dets[sid] = nms(std::move(dets), cfg.nms_thresh);
 
-                if (cur_batch[b].frame_num % (uint64_t)cfg.fps_window == 0) {
+                if (cur_batch[b].frame_num % (uint64_t)cfg.fps_window == 0)
                     std::cout << "[src=" << sid
                               << " frame=" << cur_batch[b].frame_num
                               << "] faces=" << last_dets[sid].size()
                               << " fps=" << std::fixed << std::setprecision(1)
                               << fps_trackers[sid].fps() << "\n";
-                }
             }
 
-            // Display render — also concurrent with the new TRT.
+            // Display — bgr_mats already populated from Phase 1 GPU path.
+            // cv::pollKey() instead of cv::waitKey(1): processes only currently
+            // pending X11/Wayland events (non-blocking) — avoids the 5-25 ms
+            // forced wait that waitKey(1) incurs in the hot path.
+            // h_canvas[cur] holds this batch's GPU-composited frames (built in
+            // the previous iteration's Phase 1, when cur was nxt).  Boxes are
+            // from this same batch — image and overlay stay in sync.  We only
+            // draw the lightweight vector overlay (boxes + labels) on the small
+            // composed canvas, then show it.
             if (cfg.display) {
                 for (int b = 0; b < cur_sz; ++b) {
-                    int sid = cur_batch[b].stream_id;
-                    if (!nv12_mats[sid].empty())
-                        cv::cvtColor(nv12_mats[sid], bgr_mats[sid],
-                                     cv::COLOR_YUV2BGR_NV12);
-                    draw_frame(bgr_mats[sid], sid,
-                               fps_trackers[sid].fps(), last_dets[sid]);
+                    const int sid = cur_batch[b].stream_id;
+                    draw_tile(h_canvas[cur], sid, cols,
+                              cfg.cell_w, cfg.cell_h,
+                              cur_batch[b].src_w, cur_batch[b].src_h,
+                              fps_trackers[sid].fps(), last_dets[sid]);
                 }
-                cv::Mat canvas = tile_frames(bgr_mats,
-                                             cfg.tiler_cols, cfg.cell_w, cfg.cell_h);
-                cv::imshow("rtsp_trt", canvas);
-                if (cv::waitKey(1) == 27) break;
+                cv::imshow("rtsp_trt", h_canvas[cur]);
+                if (cv::pollKey() == 27) break;
             }
 
             if (have_nxt) {
@@ -357,27 +420,43 @@ int main(int argc, char** argv) {
         }
     }
 
-    // Drain the final in-flight batch.
+    // Drain final batch
     if (primed) {
         engine.wait();
-        cudaMemcpy(h_output[cur].data(), d_output[cur],
-                   (size_t)cur_sz * out_per_img * sizeof(float),
-                   cudaMemcpyDeviceToHost);
+        cudaMemsetAsync(d_det_counts_gpu, 0, (size_t)cur_sz * sizeof(int), post_stream);
         for (int b = 0; b < cur_sz; ++b) {
-            int sid  = cur_batch[b].stream_id;
-            auto dets = decode_detections(
-                h_output[cur].data() + (size_t)b * out_per_img,
-                num_attrs, num_anchors, cfg.conf_thresh,
-                lb_infos[sid], cur_batch[b].src_w, cur_batch[b].src_h);
-            last_dets[sid] = nms(std::move(dets), cfg.nms_thresh);
+            int sid = cur_batch[b].stream_id;
+            decode_detections_gpu(
+                d_output[cur] + (size_t)b * out_per_img,
+                num_anchors, cfg.conf_thresh, lb_infos[sid],
+                cur_batch[b].src_w, cur_batch[b].src_h,
+                d_dets_gpu + (size_t)b * MAX_DETS_PER_IMG,
+                d_det_counts_gpu + b, post_stream);
+        }
+        cudaMemcpyAsync(h_det_counts, d_det_counts_gpu, cur_sz * sizeof(int), cudaMemcpyDeviceToHost, post_stream);
+        cudaMemcpyAsync(h_dets_all, d_dets_gpu, (size_t)cur_sz * MAX_DETS_PER_IMG * sizeof(Detection), cudaMemcpyDeviceToHost, post_stream);
+        cudaStreamSynchronize(post_stream);
+        for (int b = 0; b < cur_sz; ++b) {
+            int sid = cur_batch[b].stream_id;
+            int cnt = std::min(h_det_counts[b], MAX_DETS_PER_IMG);
+            last_dets[sid] = nms(std::vector<Detection>(
+                h_dets_all + b * MAX_DETS_PER_IMG,
+                h_dets_all + b * MAX_DETS_PER_IMG + cnt), cfg.nms_thresh);
         }
     }
 
     std::cout << "Stopping...\n";
     for (auto& s : streams) s->stop();
     cv::destroyAllWindows();
-    for (int i = 0; i < n; ++i) cudaStreamDestroy(pre_streams[i]);
-    if (dl_stream) cudaStreamDestroy(dl_stream);
+
+    // Cleanup
+    for (int i = 0; i < n; ++i)
+        cudaStreamDestroy(pre_streams[i]);
+    cudaStreamDestroy(dl_stream);
+    cudaStreamDestroy(post_stream);
     for (int i = 0; i < 2; ++i) { cudaFree(d_input[i]); cudaFree(d_output[i]); }
+    cudaFree(d_dets_gpu); cudaFree(d_det_counts_gpu);
+    cudaFreeHost(h_det_counts); cudaFreeHost(h_dets_all);
+    if (d_canvas) cudaFree(d_canvas);
     return 0;
 }

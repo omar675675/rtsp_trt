@@ -7,6 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/rtsp_trt.dir/src/main.cpp.o.d"
   "CMakeFiles/rtsp_trt.dir/src/postprocess.cpp.o"
   "CMakeFiles/rtsp_trt.dir/src/postprocess.cpp.o.d"
+  "CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o"
+  "CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o.d"
   "CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o"
   "CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o.d"
   "CMakeFiles/rtsp_trt.dir/src/stream.cpp.o"

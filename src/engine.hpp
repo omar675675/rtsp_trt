@@ -2,6 +2,7 @@
 #include <NvInfer.h>
 #include <cuda_runtime.h>
 #include <string>
+#include <vector>
 
 class Engine {
 public:
@@ -36,6 +37,28 @@ private:
     nvinfer1::ICudaEngine*       engine_   = nullptr;
     nvinfer1::IExecutionContext* ctx_      = nullptr;
     cudaStream_t                 stream_   = nullptr;
+
+    // ── CUDA graph cache ──────────────────────────────────────────────────────
+    // TensorRT's enqueueV3 has substantial CPU-side launch cost: it pushes
+    // hundreds of kernels and re-validates shape/addresses every call.  Capturing
+    // that work once into a CUDA graph lets us replay it as a single
+    // cudaGraphLaunch (~few µs), removing the per-inference launch bubble.
+    //
+    // The graph bakes in the I/O addresses and batch shape, so we cache one graph
+    // per (input ptr, output ptr, batch) combination.  With double-buffering and
+    // a steady full batch that's just 2 graphs.  Partial batches fall back to a
+    // plain enqueueV3.  If capture ever fails, use_graph_ disables it permanently.
+    struct GraphEntry {
+        void*           in;
+        void*           out;
+        int             batch;
+        cudaGraphExec_t exec;
+    };
+    std::vector<GraphEntry> graphs_;
+    bool                    use_graph_ = true;
+
+    bool submit_enqueue(void* d_input, void* d_output, int batch); // plain path
+    cudaGraphExec_t find_graph(void* in, void* out, int batch) const;
 
     std::string in_name_, out_name_;
     int         max_batch_   = 1;
