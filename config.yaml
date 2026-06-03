@@ -20,14 +20,11 @@ detection:
 # Add or remove entries freely. Everything else adapts.
 # Supports: bare paths (/path/to/file.mp4), file:// URIs, rtsp:// URIs
 streams:
-  - /home/omar/luna/rtsp_trt/streams/test1.mp4
-  - /home/omar/luna/rtsp_trt/streams/test2.mp4
-  - /home/omar/luna/rtsp_trt/streams/test3.mp4
-  - /home/omar/luna/rtsp_trt/streams/test4.mp4
-  - /home/omar/luna/rtsp_trt/streams/test5.mp4
-  - /home/omar/luna/rtsp_trt/streams/test6.mp4
-  - /home/omar/luna/rtsp_trt/streams/test7.mp4
-  - /home/omar/luna/rtsp_trt/streams/test8.mp4
+  - streams/test1.mp4
+  - streams/test2.mp4
+  - streams/test3.mp4
+  - streams/test4.mp4
+
   
   # RTSP examples:
   # - rtsp://admin:pass@192.168.1.100/stream1
