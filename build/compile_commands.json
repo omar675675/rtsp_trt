@@ -1,33 +1,39 @@
 [
 {
   "directory": "/home/omar/luna/rtsp_trt/build",
-  "command": "/usr/bin/c++  -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -isystem /usr/include/opencv4 -O3 -std=gnu++17 -Wall -Wextra -Wno-unused-parameter -o CMakeFiles/rtsp_trt.dir/src/main.cpp.o -c /home/omar/luna/rtsp_trt/src/main.cpp",
+  "command": "/usr/bin/c++  -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -O3 -std=gnu++17 -Wall -Wextra -Wno-unused-parameter -o CMakeFiles/rtsp_trt.dir/src/main.cpp.o -c /home/omar/luna/rtsp_trt/src/main.cpp",
   "file": "/home/omar/luna/rtsp_trt/src/main.cpp",
   "output": "CMakeFiles/rtsp_trt.dir/src/main.cpp.o"
 },
 {
   "directory": "/home/omar/luna/rtsp_trt/build",
-  "command": "/usr/bin/c++  -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -isystem /usr/include/opencv4 -O3 -std=gnu++17 -Wall -Wextra -Wno-unused-parameter -o CMakeFiles/rtsp_trt.dir/src/engine.cpp.o -c /home/omar/luna/rtsp_trt/src/engine.cpp",
+  "command": "/usr/bin/c++  -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -O3 -std=gnu++17 -Wall -Wextra -Wno-unused-parameter -o CMakeFiles/rtsp_trt.dir/src/engine.cpp.o -c /home/omar/luna/rtsp_trt/src/engine.cpp",
   "file": "/home/omar/luna/rtsp_trt/src/engine.cpp",
   "output": "CMakeFiles/rtsp_trt.dir/src/engine.cpp.o"
 },
 {
   "directory": "/home/omar/luna/rtsp_trt/build",
-  "command": "/usr/bin/c++  -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -isystem /usr/include/opencv4 -O3 -std=gnu++17 -Wall -Wextra -Wno-unused-parameter -o CMakeFiles/rtsp_trt.dir/src/stream.cpp.o -c /home/omar/luna/rtsp_trt/src/stream.cpp",
+  "command": "/usr/bin/c++  -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -O3 -std=gnu++17 -Wall -Wextra -Wno-unused-parameter -o CMakeFiles/rtsp_trt.dir/src/stream.cpp.o -c /home/omar/luna/rtsp_trt/src/stream.cpp",
   "file": "/home/omar/luna/rtsp_trt/src/stream.cpp",
   "output": "CMakeFiles/rtsp_trt.dir/src/stream.cpp.o"
 },
 {
   "directory": "/home/omar/luna/rtsp_trt/build",
-  "command": "/usr/bin/c++  -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -isystem /usr/include/opencv4 -O3 -std=gnu++17 -Wall -Wextra -Wno-unused-parameter -o CMakeFiles/rtsp_trt.dir/src/postprocess.cpp.o -c /home/omar/luna/rtsp_trt/src/postprocess.cpp",
+  "command": "/usr/bin/c++  -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -O3 -std=gnu++17 -Wall -Wextra -Wno-unused-parameter -o CMakeFiles/rtsp_trt.dir/src/postprocess.cpp.o -c /home/omar/luna/rtsp_trt/src/postprocess.cpp",
   "file": "/home/omar/luna/rtsp_trt/src/postprocess.cpp",
   "output": "CMakeFiles/rtsp_trt.dir/src/postprocess.cpp.o"
 },
 {
   "directory": "/home/omar/luna/rtsp_trt/build",
-  "command": "/usr/bin/c++  -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -isystem /usr/include/opencv4 -O3 -std=gnu++17 -Wall -Wextra -Wno-unused-parameter -o CMakeFiles/rtsp_trt.dir/src/display.cpp.o -c /home/omar/luna/rtsp_trt/src/display.cpp",
-  "file": "/home/omar/luna/rtsp_trt/src/display.cpp",
-  "output": "CMakeFiles/rtsp_trt.dir/src/display.cpp.o"
+  "command": "/usr/bin/c++  -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -O3 -std=gnu++17 -Wall -Wextra -Wno-unused-parameter -o CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.o -c /home/omar/luna/rtsp_trt/src/bytetrack.cpp",
+  "file": "/home/omar/luna/rtsp_trt/src/bytetrack.cpp",
+  "output": "CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.o"
+},
+{
+  "directory": "/home/omar/luna/rtsp_trt/build",
+  "command": "/usr/bin/c++  -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -O3 -std=gnu++17 -Wall -Wextra -Wno-unused-parameter -o CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.o -c /home/omar/luna/rtsp_trt/src/pipeline_core.cpp",
+  "file": "/home/omar/luna/rtsp_trt/src/pipeline_core.cpp",
+  "output": "CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.o"
 },
 {
   "directory": "/home/omar/luna/rtsp_trt/build",
@@ -40,5 +46,65 @@
   "command": "/usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/rtsp_trt.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" --extended-lambda -use_fast_math -x cu -c /home/omar/luna/rtsp_trt/src/postprocess_gpu.cu -o CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o",
   "file": "/home/omar/luna/rtsp_trt/src/postprocess_gpu.cu",
   "output": "CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o"
+},
+{
+  "directory": "/home/omar/luna/rtsp_trt/build",
+  "command": "/usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/rtsp_trt.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" --extended-lambda -use_fast_math -x cu -c /home/omar/luna/rtsp_trt/src/crop.cu -o CMakeFiles/rtsp_trt.dir/src/crop.cu.o",
+  "file": "/home/omar/luna/rtsp_trt/src/crop.cu",
+  "output": "CMakeFiles/rtsp_trt.dir/src/crop.cu.o"
+},
+{
+  "directory": "/home/omar/luna/rtsp_trt/build",
+  "command": "/usr/bin/c++ -D_rtsp_trt_EXPORTS -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -isystem /home/omar/.local/lib/python3.12/site-packages/pybind11/include -isystem /usr/include/python3.12 -O3 -std=gnu++17 -fPIC -fvisibility=hidden -Wall -Wextra -Wno-unused-parameter -flto=auto -fno-fat-lto-objects -o CMakeFiles/_rtsp_trt.dir/src/python_ext.cpp.o -c /home/omar/luna/rtsp_trt/src/python_ext.cpp",
+  "file": "/home/omar/luna/rtsp_trt/src/python_ext.cpp",
+  "output": "CMakeFiles/_rtsp_trt.dir/src/python_ext.cpp.o"
+},
+{
+  "directory": "/home/omar/luna/rtsp_trt/build",
+  "command": "/usr/bin/c++ -D_rtsp_trt_EXPORTS -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -isystem /home/omar/.local/lib/python3.12/site-packages/pybind11/include -isystem /usr/include/python3.12 -O3 -std=gnu++17 -fPIC -fvisibility=hidden -Wall -Wextra -Wno-unused-parameter -flto=auto -fno-fat-lto-objects -o CMakeFiles/_rtsp_trt.dir/src/engine.cpp.o -c /home/omar/luna/rtsp_trt/src/engine.cpp",
+  "file": "/home/omar/luna/rtsp_trt/src/engine.cpp",
+  "output": "CMakeFiles/_rtsp_trt.dir/src/engine.cpp.o"
+},
+{
+  "directory": "/home/omar/luna/rtsp_trt/build",
+  "command": "/usr/bin/c++ -D_rtsp_trt_EXPORTS -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -isystem /home/omar/.local/lib/python3.12/site-packages/pybind11/include -isystem /usr/include/python3.12 -O3 -std=gnu++17 -fPIC -fvisibility=hidden -Wall -Wextra -Wno-unused-parameter -flto=auto -fno-fat-lto-objects -o CMakeFiles/_rtsp_trt.dir/src/stream.cpp.o -c /home/omar/luna/rtsp_trt/src/stream.cpp",
+  "file": "/home/omar/luna/rtsp_trt/src/stream.cpp",
+  "output": "CMakeFiles/_rtsp_trt.dir/src/stream.cpp.o"
+},
+{
+  "directory": "/home/omar/luna/rtsp_trt/build",
+  "command": "/usr/bin/c++ -D_rtsp_trt_EXPORTS -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -isystem /home/omar/.local/lib/python3.12/site-packages/pybind11/include -isystem /usr/include/python3.12 -O3 -std=gnu++17 -fPIC -fvisibility=hidden -Wall -Wextra -Wno-unused-parameter -flto=auto -fno-fat-lto-objects -o CMakeFiles/_rtsp_trt.dir/src/postprocess.cpp.o -c /home/omar/luna/rtsp_trt/src/postprocess.cpp",
+  "file": "/home/omar/luna/rtsp_trt/src/postprocess.cpp",
+  "output": "CMakeFiles/_rtsp_trt.dir/src/postprocess.cpp.o"
+},
+{
+  "directory": "/home/omar/luna/rtsp_trt/build",
+  "command": "/usr/bin/c++ -D_rtsp_trt_EXPORTS -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -isystem /home/omar/.local/lib/python3.12/site-packages/pybind11/include -isystem /usr/include/python3.12 -O3 -std=gnu++17 -fPIC -fvisibility=hidden -Wall -Wextra -Wno-unused-parameter -flto=auto -fno-fat-lto-objects -o CMakeFiles/_rtsp_trt.dir/src/bytetrack.cpp.o -c /home/omar/luna/rtsp_trt/src/bytetrack.cpp",
+  "file": "/home/omar/luna/rtsp_trt/src/bytetrack.cpp",
+  "output": "CMakeFiles/_rtsp_trt.dir/src/bytetrack.cpp.o"
+},
+{
+  "directory": "/home/omar/luna/rtsp_trt/build",
+  "command": "/usr/bin/c++ -D_rtsp_trt_EXPORTS -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -isystem /home/omar/.local/lib/python3.12/site-packages/pybind11/include -isystem /usr/include/python3.12 -O3 -std=gnu++17 -fPIC -fvisibility=hidden -Wall -Wextra -Wno-unused-parameter -flto=auto -fno-fat-lto-objects -o CMakeFiles/_rtsp_trt.dir/src/pipeline_core.cpp.o -c /home/omar/luna/rtsp_trt/src/pipeline_core.cpp",
+  "file": "/home/omar/luna/rtsp_trt/src/pipeline_core.cpp",
+  "output": "CMakeFiles/_rtsp_trt.dir/src/pipeline_core.cpp.o"
+},
+{
+  "directory": "/home/omar/luna/rtsp_trt/build",
+  "command": "/usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler -D_rtsp_trt_EXPORTS --options-file CMakeFiles/_rtsp_trt.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -Xcompiler=-fPIC -Xcompiler=-fvisibility=hidden --extended-lambda -use_fast_math -x cu -c /home/omar/luna/rtsp_trt/src/preprocess.cu -o CMakeFiles/_rtsp_trt.dir/src/preprocess.cu.o",
+  "file": "/home/omar/luna/rtsp_trt/src/preprocess.cu",
+  "output": "CMakeFiles/_rtsp_trt.dir/src/preprocess.cu.o"
+},
+{
+  "directory": "/home/omar/luna/rtsp_trt/build",
+  "command": "/usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler -D_rtsp_trt_EXPORTS --options-file CMakeFiles/_rtsp_trt.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -Xcompiler=-fPIC -Xcompiler=-fvisibility=hidden --extended-lambda -use_fast_math -x cu -c /home/omar/luna/rtsp_trt/src/postprocess_gpu.cu -o CMakeFiles/_rtsp_trt.dir/src/postprocess_gpu.cu.o",
+  "file": "/home/omar/luna/rtsp_trt/src/postprocess_gpu.cu",
+  "output": "CMakeFiles/_rtsp_trt.dir/src/postprocess_gpu.cu.o"
+},
+{
+  "directory": "/home/omar/luna/rtsp_trt/build",
+  "command": "/usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler -D_rtsp_trt_EXPORTS --options-file CMakeFiles/_rtsp_trt.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++17 \"--generate-code=arch=compute_89,code=[compute_89,sm_89]\" -Xcompiler=-fPIC -Xcompiler=-fvisibility=hidden --extended-lambda -use_fast_math -x cu -c /home/omar/luna/rtsp_trt/src/crop.cu -o CMakeFiles/_rtsp_trt.dir/src/crop.cu.o",
+  "file": "/home/omar/luna/rtsp_trt/src/crop.cu",
+  "output": "CMakeFiles/_rtsp_trt.dir/src/crop.cu.o"
 }
 ]

@@ -64,6 +64,7 @@ CMAKE_BINARY_DIR = /home/omar/luna/rtsp_trt/build
 
 # The main recursive "all" target.
 all: CMakeFiles/rtsp_trt.dir/all
+all: CMakeFiles/_rtsp_trt.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -72,6 +73,7 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/rtsp_trt.dir/clean
+clean: CMakeFiles/_rtsp_trt.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -81,12 +83,12 @@ clean: CMakeFiles/rtsp_trt.dir/clean
 CMakeFiles/rtsp_trt.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/omar/luna/rtsp_trt/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Built target rtsp_trt"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/omar/luna/rtsp_trt/build/CMakeFiles --progress-num=11,12,13,14,15,16,17,18,19,20 "Built target rtsp_trt"
 .PHONY : CMakeFiles/rtsp_trt.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/rtsp_trt.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/omar/luna/rtsp_trt/build/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/omar/luna/rtsp_trt/build/CMakeFiles 10
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/rtsp_trt.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/omar/luna/rtsp_trt/build/CMakeFiles 0
 .PHONY : CMakeFiles/rtsp_trt.dir/rule
@@ -99,6 +101,32 @@ rtsp_trt: CMakeFiles/rtsp_trt.dir/rule
 CMakeFiles/rtsp_trt.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/clean
 .PHONY : CMakeFiles/rtsp_trt.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/_rtsp_trt.dir
+
+# All Build rule for target.
+CMakeFiles/_rtsp_trt.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/omar/luna/rtsp_trt/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10 "Built target _rtsp_trt"
+.PHONY : CMakeFiles/_rtsp_trt.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/_rtsp_trt.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/omar/luna/rtsp_trt/build/CMakeFiles 10
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/_rtsp_trt.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/omar/luna/rtsp_trt/build/CMakeFiles 0
+.PHONY : CMakeFiles/_rtsp_trt.dir/rule
+
+# Convenience name for target.
+_rtsp_trt: CMakeFiles/_rtsp_trt.dir/rule
+.PHONY : _rtsp_trt
+
+# clean rule for target.
+CMakeFiles/_rtsp_trt.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/clean
+.PHONY : CMakeFiles/_rtsp_trt.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

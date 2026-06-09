@@ -129,29 +129,72 @@ rtsp_trt/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/build
 .PHONY : rtsp_trt/fast
 
-src/display.o: src/display.cpp.o
-.PHONY : src/display.o
+#=============================================================================
+# Target rules for targets named _rtsp_trt
+
+# Build rule for target.
+_rtsp_trt: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _rtsp_trt
+.PHONY : _rtsp_trt
+
+# fast build rule for target.
+_rtsp_trt/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/build
+.PHONY : _rtsp_trt/fast
+
+src/bytetrack.o: src/bytetrack.cpp.o
+.PHONY : src/bytetrack.o
 
 # target to build an object file
-src/display.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/display.cpp.o
-.PHONY : src/display.cpp.o
+src/bytetrack.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/bytetrack.cpp.o
+.PHONY : src/bytetrack.cpp.o
 
-src/display.i: src/display.cpp.i
-.PHONY : src/display.i
+src/bytetrack.i: src/bytetrack.cpp.i
+.PHONY : src/bytetrack.i
 
 # target to preprocess a source file
-src/display.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/display.cpp.i
-.PHONY : src/display.cpp.i
+src/bytetrack.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/bytetrack.cpp.i
+.PHONY : src/bytetrack.cpp.i
 
-src/display.s: src/display.cpp.s
-.PHONY : src/display.s
+src/bytetrack.s: src/bytetrack.cpp.s
+.PHONY : src/bytetrack.s
 
 # target to generate assembly for a file
-src/display.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/display.cpp.s
-.PHONY : src/display.cpp.s
+src/bytetrack.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/bytetrack.cpp.s
+.PHONY : src/bytetrack.cpp.s
+
+src/crop.o: src/crop.cu.o
+.PHONY : src/crop.o
+
+# target to build an object file
+src/crop.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/crop.cu.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/crop.cu.o
+.PHONY : src/crop.cu.o
+
+src/crop.i: src/crop.cu.i
+.PHONY : src/crop.i
+
+# target to preprocess a source file
+src/crop.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/crop.cu.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/crop.cu.i
+.PHONY : src/crop.cu.i
+
+src/crop.s: src/crop.cu.s
+.PHONY : src/crop.s
+
+# target to generate assembly for a file
+src/crop.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/crop.cu.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/crop.cu.s
+.PHONY : src/crop.cu.s
 
 src/engine.o: src/engine.cpp.o
 .PHONY : src/engine.o
@@ -159,6 +202,7 @@ src/engine.o: src/engine.cpp.o
 # target to build an object file
 src/engine.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/engine.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/engine.cpp.o
 .PHONY : src/engine.cpp.o
 
 src/engine.i: src/engine.cpp.i
@@ -167,6 +211,7 @@ src/engine.i: src/engine.cpp.i
 # target to preprocess a source file
 src/engine.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/engine.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/engine.cpp.i
 .PHONY : src/engine.cpp.i
 
 src/engine.s: src/engine.cpp.s
@@ -175,6 +220,7 @@ src/engine.s: src/engine.cpp.s
 # target to generate assembly for a file
 src/engine.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/engine.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/engine.cpp.s
 .PHONY : src/engine.cpp.s
 
 src/main.o: src/main.cpp.o
@@ -201,12 +247,40 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/pipeline_core.o: src/pipeline_core.cpp.o
+.PHONY : src/pipeline_core.o
+
+# target to build an object file
+src/pipeline_core.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/pipeline_core.cpp.o
+.PHONY : src/pipeline_core.cpp.o
+
+src/pipeline_core.i: src/pipeline_core.cpp.i
+.PHONY : src/pipeline_core.i
+
+# target to preprocess a source file
+src/pipeline_core.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/pipeline_core.cpp.i
+.PHONY : src/pipeline_core.cpp.i
+
+src/pipeline_core.s: src/pipeline_core.cpp.s
+.PHONY : src/pipeline_core.s
+
+# target to generate assembly for a file
+src/pipeline_core.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/pipeline_core.cpp.s
+.PHONY : src/pipeline_core.cpp.s
+
 src/postprocess.o: src/postprocess.cpp.o
 .PHONY : src/postprocess.o
 
 # target to build an object file
 src/postprocess.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/postprocess.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/postprocess.cpp.o
 .PHONY : src/postprocess.cpp.o
 
 src/postprocess.i: src/postprocess.cpp.i
@@ -215,6 +289,7 @@ src/postprocess.i: src/postprocess.cpp.i
 # target to preprocess a source file
 src/postprocess.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/postprocess.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/postprocess.cpp.i
 .PHONY : src/postprocess.cpp.i
 
 src/postprocess.s: src/postprocess.cpp.s
@@ -223,6 +298,7 @@ src/postprocess.s: src/postprocess.cpp.s
 # target to generate assembly for a file
 src/postprocess.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/postprocess.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/postprocess.cpp.s
 .PHONY : src/postprocess.cpp.s
 
 src/postprocess_gpu.o: src/postprocess_gpu.cu.o
@@ -231,6 +307,7 @@ src/postprocess_gpu.o: src/postprocess_gpu.cu.o
 # target to build an object file
 src/postprocess_gpu.cu.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/postprocess_gpu.cu.o
 .PHONY : src/postprocess_gpu.cu.o
 
 src/postprocess_gpu.i: src/postprocess_gpu.cu.i
@@ -239,6 +316,7 @@ src/postprocess_gpu.i: src/postprocess_gpu.cu.i
 # target to preprocess a source file
 src/postprocess_gpu.cu.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/postprocess_gpu.cu.i
 .PHONY : src/postprocess_gpu.cu.i
 
 src/postprocess_gpu.s: src/postprocess_gpu.cu.s
@@ -247,6 +325,7 @@ src/postprocess_gpu.s: src/postprocess_gpu.cu.s
 # target to generate assembly for a file
 src/postprocess_gpu.cu.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/postprocess_gpu.cu.s
 .PHONY : src/postprocess_gpu.cu.s
 
 src/preprocess.o: src/preprocess.cu.o
@@ -255,6 +334,7 @@ src/preprocess.o: src/preprocess.cu.o
 # target to build an object file
 src/preprocess.cu.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/preprocess.cu.o
 .PHONY : src/preprocess.cu.o
 
 src/preprocess.i: src/preprocess.cu.i
@@ -263,6 +343,7 @@ src/preprocess.i: src/preprocess.cu.i
 # target to preprocess a source file
 src/preprocess.cu.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/preprocess.cu.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/preprocess.cu.i
 .PHONY : src/preprocess.cu.i
 
 src/preprocess.s: src/preprocess.cu.s
@@ -271,7 +352,32 @@ src/preprocess.s: src/preprocess.cu.s
 # target to generate assembly for a file
 src/preprocess.cu.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/preprocess.cu.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/preprocess.cu.s
 .PHONY : src/preprocess.cu.s
+
+src/python_ext.o: src/python_ext.cpp.o
+.PHONY : src/python_ext.o
+
+# target to build an object file
+src/python_ext.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/python_ext.cpp.o
+.PHONY : src/python_ext.cpp.o
+
+src/python_ext.i: src/python_ext.cpp.i
+.PHONY : src/python_ext.i
+
+# target to preprocess a source file
+src/python_ext.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/python_ext.cpp.i
+.PHONY : src/python_ext.cpp.i
+
+src/python_ext.s: src/python_ext.cpp.s
+.PHONY : src/python_ext.s
+
+# target to generate assembly for a file
+src/python_ext.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/python_ext.cpp.s
+.PHONY : src/python_ext.cpp.s
 
 src/stream.o: src/stream.cpp.o
 .PHONY : src/stream.o
@@ -279,6 +385,7 @@ src/stream.o: src/stream.cpp.o
 # target to build an object file
 src/stream.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/stream.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/stream.cpp.o
 .PHONY : src/stream.cpp.o
 
 src/stream.i: src/stream.cpp.i
@@ -287,6 +394,7 @@ src/stream.i: src/stream.cpp.i
 # target to preprocess a source file
 src/stream.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/stream.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/stream.cpp.i
 .PHONY : src/stream.cpp.i
 
 src/stream.s: src/stream.cpp.s
@@ -295,6 +403,7 @@ src/stream.s: src/stream.cpp.s
 # target to generate assembly for a file
 src/stream.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/rtsp_trt.dir/build.make CMakeFiles/rtsp_trt.dir/src/stream.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_rtsp_trt.dir/build.make CMakeFiles/_rtsp_trt.dir/src/stream.cpp.s
 .PHONY : src/stream.cpp.s
 
 # Help Target
@@ -305,16 +414,23 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... _rtsp_trt"
 	@echo "... rtsp_trt"
-	@echo "... src/display.o"
-	@echo "... src/display.i"
-	@echo "... src/display.s"
+	@echo "... src/bytetrack.o"
+	@echo "... src/bytetrack.i"
+	@echo "... src/bytetrack.s"
+	@echo "... src/crop.o"
+	@echo "... src/crop.i"
+	@echo "... src/crop.s"
 	@echo "... src/engine.o"
 	@echo "... src/engine.i"
 	@echo "... src/engine.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/pipeline_core.o"
+	@echo "... src/pipeline_core.i"
+	@echo "... src/pipeline_core.s"
 	@echo "... src/postprocess.o"
 	@echo "... src/postprocess.i"
 	@echo "... src/postprocess.s"
@@ -324,6 +440,9 @@ help:
 	@echo "... src/preprocess.o"
 	@echo "... src/preprocess.i"
 	@echo "... src/preprocess.s"
+	@echo "... src/python_ext.o"
+	@echo "... src/python_ext.i"
+	@echo "... src/python_ext.s"
 	@echo "... src/stream.o"
 	@echo "... src/stream.i"
 	@echo "... src/stream.s"

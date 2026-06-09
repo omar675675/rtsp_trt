@@ -438,6 +438,19 @@ PKG_CONFIG_ARGN:STRING=
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
 
+//Overwrite cached values read from Python library (classic search).
+// Turn off if cross-compiling and manually setting these values.
+PYBIND11_PYTHONLIBS_OVERWRITE:BOOL=ON
+
+//Python version to use for compiling modules
+PYBIND11_PYTHON_VERSION:STRING=
+
+//Path to a program.
+PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python
+
+//Path to a library.
+PYTHON_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libpython3.12.so
+
 //Path to a file.
 TRT_INCLUDE:PATH=/usr/include/x86_64-linux-gnu
 
@@ -464,6 +477,9 @@ pkgcfg_lib_GST_gstreamer-1.0:FILEPATH=/usr/lib/x86_64-linux-gnu/libgstreamer-1.0
 
 //Path to a library.
 pkgcfg_lib_GST_gstvideo-1.0:FILEPATH=/usr/lib/x86_64-linux-gnu/libgstvideo-1.0.so
+
+//The directory containing a CMake configuration file for pybind11.
+pybind11_DIR:PATH=/home/omar/.local/lib/python3.12/site-packages/pybind11/share/cmake/pybind11
 
 //Value Computed by CMake
 rtsp_trt_BINARY_DIR:STATIC=/home/omar/luna/rtsp_trt/build
@@ -532,6 +548,8 @@ CMAKE_CXX_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_CXX_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_DLLTOOL
 CMAKE_DLLTOOL-ADVANCED:INTERNAL=1
+//Whether to issue deprecation errors for macros and functions.
+CMAKE_ERROR_DEPRECATED:INTERNAL=FALSE
 //Executable file format
 CMAKE_EXECUTABLE_FORMAT:INTERNAL=ELF
 //ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS
@@ -619,12 +637,20 @@ CMAKE_STATIC_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_STRIP
 CMAKE_STRIP-ADVANCED:INTERNAL=1
+//Suppress errors that are meant for the author of the CMakeLists.txt
+// files.
+CMAKE_SUPPRESS_DEVELOPER_ERRORS:INTERNAL=TRUE
+//Suppress Warnings that are meant for the author of the CMakeLists.txt
+// files.
+CMAKE_SUPPRESS_DEVELOPER_WARNINGS:INTERNAL=TRUE
 //ADVANCED property for variable: CMAKE_TAPI
 CMAKE_TAPI-ADVANCED:INTERNAL=1
 //uname command
 CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//Whether to issue warnings for deprecated functionality.
+CMAKE_WARN_DEPRECATED:INTERNAL=FALSE
 //ADVANCED property for variable: CUDAToolkit_CUPTI_INCLUDE_DIR
 CUDAToolkit_CUPTI_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CUDAToolkit_rt_LIBRARY
@@ -775,8 +801,12 @@ CUDA_pcsamplingutil_LIBRARY-ADVANCED:INTERNAL=1
 FIND_PACKAGE_MESSAGE_DETAILS_CUDAToolkit:INTERNAL=[/usr/local/cuda-12.6/targets/x86_64-linux/include][/usr/local/cuda-12.6/lib64/libcudart.so][/usr/local/cuda-12.6/bin][v12.6.85()]
 //Details about finding OpenCV
 FIND_PACKAGE_MESSAGE_DETAILS_OpenCV:INTERNAL=[/usr][v4.6.0()]
+//Details about finding PYTHON
+FIND_PACKAGE_MESSAGE_DETAILS_PYTHON:INTERNAL=/usr/bin/python3.12.3
 //Details about finding PkgConfig
 FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/bin/pkg-config][v1.8.1()]
+//Details about finding PythonInterp
+FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/usr/bin/python][v3.12.3(3.8)]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 GST_CFLAGS:INTERNAL=-I/usr/include/gstreamer-1.0;-I/usr/include/glib-2.0;-I/usr/lib/x86_64-linux-gnu/glib-2.0/include;-I/usr/include;-I/usr/include/x86_64-linux-gnu;-pthread;-I/usr/include/orc-0.4
@@ -825,12 +855,30 @@ GST_gstreamer-video-1.0_LIBDIR:INTERNAL=/usr/lib/x86_64-linux-gnu
 GST_gstreamer-video-1.0_MODULE_NAME:INTERNAL=gstreamer-video-1.0
 GST_gstreamer-video-1.0_PREFIX:INTERNAL=/usr
 GST_gstreamer-video-1.0_VERSION:INTERNAL=1.24.2
+//Test HAS_FLTO_AUTO
+HAS_FLTO_AUTO:INTERNAL=1
 //ADVANCED property for variable: PKG_CONFIG_ARGN
 PKG_CONFIG_ARGN-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: PKG_CONFIG_EXECUTABLE
 PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PYTHON_EXECUTABLE
+PYTHON_EXECUTABLE-ADVANCED:INTERNAL=1
+PYTHON_INCLUDE_DIRS:INTERNAL=/usr/include/python3.12
+PYTHON_IS_DEBUG:INTERNAL=0
+PYTHON_LIBRARIES:INTERNAL=/usr/lib/x86_64-linux-gnu/libpython3.12.so
+//ADVANCED property for variable: PYTHON_LIBRARY
+PYTHON_LIBRARY-ADVANCED:INTERNAL=1
+PYTHON_MODULE_DEBUG_POSTFIX:INTERNAL=
+PYTHON_MODULE_EXTENSION:INTERNAL=.cpython-312-x86_64-linux-gnu.so
+PYTHON_MODULE_PREFIX:INTERNAL=
+PYTHON_VERSION:INTERNAL=3.12.3
+PYTHON_VERSION_MAJOR:INTERNAL=3
+PYTHON_VERSION_MINOR:INTERNAL=12
+Python_ADDITIONAL_VERSIONS:INTERNAL=3.12;3.11;3.10;3.9;3.8
 //linker supports push/pop state
 _CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED:INTERNAL=TRUE
+_PYBIND11_CROSSCOMPILING:INTERNAL=OFF
+_Python:INTERNAL=PYTHON
 __pkg_config_arguments_GST:INTERNAL=REQUIRED;gstreamer-1.0;gstreamer-app-1.0;gstreamer-video-1.0
 __pkg_config_checked_GST:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib_GST_glib-2.0
@@ -846,4 +894,6 @@ pkgcfg_lib_GST_gstreamer-1.0-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib_GST_gstvideo-1.0
 pkgcfg_lib_GST_gstvideo-1.0-ADVANCED:INTERNAL=1
 prefix_result:INTERNAL=/usr/lib/x86_64-linux-gnu
+//Directories where pybind11 and possibly Python headers are located
+pybind11_INCLUDE_DIRS:INTERNAL=/home/omar/.local/lib/python3.12/site-packages/pybind11/include;/usr/include/python3.12
 

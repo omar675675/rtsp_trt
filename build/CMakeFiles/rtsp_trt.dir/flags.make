@@ -11,7 +11,7 @@ CUDA_FLAGS = -O3 -DNDEBUG -std=c++17 "--generate-code=arch=compute_89,code=[comp
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -isystem /usr/include/opencv4
+CXX_INCLUDES = -I/home/omar/luna/rtsp_trt/src -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/orc-0.4 -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include
 
 CXX_FLAGS = -O3 -std=gnu++17 -Wall -Wextra -Wno-unused-parameter
 

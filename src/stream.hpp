@@ -74,6 +74,7 @@ private:
     std::string uri_;
     bool        is_file_;
 
+
     GstElement* pipeline_ = nullptr;
     GstElement* appsink_  = nullptr;
     GstElement* filesrc_  = nullptr;

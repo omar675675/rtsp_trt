@@ -867,3 +867,46 @@ events:
         
       exitCode: 0
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.28/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/share/cmake-3.28/Modules/CheckCXXCompilerFlag.cmake:34 (cmake_check_compiler_flag)"
+      - "/home/omar/.local/lib/python3.12/site-packages/pybind11/share/cmake/pybind11/pybind11Common.cmake:332 (check_cxx_compiler_flag)"
+      - "/home/omar/.local/lib/python3.12/site-packages/pybind11/share/cmake/pybind11/pybind11Common.cmake:377 (_pybind11_return_if_cxx_and_linker_flags_work)"
+      - "/home/omar/.local/lib/python3.12/site-packages/pybind11/share/cmake/pybind11/pybind11Common.cmake:438 (_pybind11_generate_lto)"
+      - "/home/omar/.local/lib/python3.12/site-packages/pybind11/share/cmake/pybind11/pybind11Config.cmake:257 (include)"
+      - "CMakeLists.txt:10 (find_package)"
+    checks:
+      - "Performing Test HAS_FLTO_AUTO"
+    directories:
+      source: "/home/omar/luna/rtsp_trt/build/CMakeFiles/CMakeScratch/TryCompile-ZmR45c"
+      binary: "/home/omar/luna/rtsp_trt/build/CMakeFiles/CMakeScratch/TryCompile-ZmR45c"
+    cmakeVariables:
+      CMAKE_CUDA_ARCHITECTURES: "52"
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: ""
+    buildResult:
+      variable: "HAS_FLTO_AUTO"
+      cached: true
+      stdout: |
+        Change Dir: '/home/omar/luna/rtsp_trt/build/CMakeFiles/CMakeScratch/TryCompile-ZmR45c'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_3c8d6/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_3c8d6.dir/build.make CMakeFiles/cmTC_3c8d6.dir/build
+        gmake[1]: Entering directory '/home/omar/luna/rtsp_trt/build/CMakeFiles/CMakeScratch/TryCompile-ZmR45c'
+        Building CXX object CMakeFiles/cmTC_3c8d6.dir/src.cxx.o
+        /usr/bin/c++ -DHAS_FLTO_AUTO  -flto=auto -fno-fat-lto-objects -o CMakeFiles/cmTC_3c8d6.dir/src.cxx.o -c /home/omar/luna/rtsp_trt/build/CMakeFiles/CMakeScratch/TryCompile-ZmR45c/src.cxx
+        Linking CXX executable cmTC_3c8d6
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3c8d6.dir/link.txt --verbose=1
+        /usr/bin/c++ CMakeFiles/cmTC_3c8d6.dir/src.cxx.o -o cmTC_3c8d6  -flto=auto 
+        gmake[1]: Leaving directory '/home/omar/luna/rtsp_trt/build/CMakeFiles/CMakeScratch/TryCompile-ZmR45c'
+        
+      exitCode: 0
+...

@@ -125,25 +125,39 @@ CMakeFiles/rtsp_trt.dir/src/postprocess.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/rtsp_trt.dir/src/postprocess.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/omar/luna/rtsp_trt/src/postprocess.cpp -o CMakeFiles/rtsp_trt.dir/src/postprocess.cpp.s
 
-CMakeFiles/rtsp_trt.dir/src/display.cpp.o: CMakeFiles/rtsp_trt.dir/flags.make
-CMakeFiles/rtsp_trt.dir/src/display.cpp.o: /home/omar/luna/rtsp_trt/src/display.cpp
-CMakeFiles/rtsp_trt.dir/src/display.cpp.o: CMakeFiles/rtsp_trt.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/omar/luna/rtsp_trt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/rtsp_trt.dir/src/display.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/rtsp_trt.dir/src/display.cpp.o -MF CMakeFiles/rtsp_trt.dir/src/display.cpp.o.d -o CMakeFiles/rtsp_trt.dir/src/display.cpp.o -c /home/omar/luna/rtsp_trt/src/display.cpp
+CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.o: CMakeFiles/rtsp_trt.dir/flags.make
+CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.o: /home/omar/luna/rtsp_trt/src/bytetrack.cpp
+CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.o: CMakeFiles/rtsp_trt.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/omar/luna/rtsp_trt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.o -MF CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.o.d -o CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.o -c /home/omar/luna/rtsp_trt/src/bytetrack.cpp
 
-CMakeFiles/rtsp_trt.dir/src/display.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/rtsp_trt.dir/src/display.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/omar/luna/rtsp_trt/src/display.cpp > CMakeFiles/rtsp_trt.dir/src/display.cpp.i
+CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/omar/luna/rtsp_trt/src/bytetrack.cpp > CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.i
 
-CMakeFiles/rtsp_trt.dir/src/display.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/rtsp_trt.dir/src/display.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/omar/luna/rtsp_trt/src/display.cpp -o CMakeFiles/rtsp_trt.dir/src/display.cpp.s
+CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/omar/luna/rtsp_trt/src/bytetrack.cpp -o CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.s
+
+CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.o: CMakeFiles/rtsp_trt.dir/flags.make
+CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.o: /home/omar/luna/rtsp_trt/src/pipeline_core.cpp
+CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.o: CMakeFiles/rtsp_trt.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/omar/luna/rtsp_trt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.o -MF CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.o.d -o CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.o -c /home/omar/luna/rtsp_trt/src/pipeline_core.cpp
+
+CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/omar/luna/rtsp_trt/src/pipeline_core.cpp > CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.i
+
+CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/omar/luna/rtsp_trt/src/pipeline_core.cpp -o CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.s
 
 CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o: CMakeFiles/rtsp_trt.dir/flags.make
 CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o: CMakeFiles/rtsp_trt.dir/includes_CUDA.rsp
 CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o: /home/omar/luna/rtsp_trt/src/preprocess.cu
 CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o: CMakeFiles/rtsp_trt.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/omar/luna/rtsp_trt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CUDA object CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/omar/luna/rtsp_trt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CUDA object CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o"
 	/usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o -MF CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o.d -x cu -c /home/omar/luna/rtsp_trt/src/preprocess.cu -o CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o
 
 CMakeFiles/rtsp_trt.dir/src/preprocess.cu.i: cmake_force
@@ -158,7 +172,7 @@ CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o: CMakeFiles/rtsp_trt.dir/flags.
 CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o: CMakeFiles/rtsp_trt.dir/includes_CUDA.rsp
 CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o: /home/omar/luna/rtsp_trt/src/postprocess_gpu.cu
 CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o: CMakeFiles/rtsp_trt.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/omar/luna/rtsp_trt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CUDA object CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/omar/luna/rtsp_trt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CUDA object CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o"
 	/usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o -MF CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o.d -x cu -c /home/omar/luna/rtsp_trt/src/postprocess_gpu.cu -o CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o
 
 CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.i: cmake_force
@@ -169,15 +183,32 @@ CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CUDA source to assembly CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.s"
 	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_ASSEMBLY_SOURCE
 
+CMakeFiles/rtsp_trt.dir/src/crop.cu.o: CMakeFiles/rtsp_trt.dir/flags.make
+CMakeFiles/rtsp_trt.dir/src/crop.cu.o: CMakeFiles/rtsp_trt.dir/includes_CUDA.rsp
+CMakeFiles/rtsp_trt.dir/src/crop.cu.o: /home/omar/luna/rtsp_trt/src/crop.cu
+CMakeFiles/rtsp_trt.dir/src/crop.cu.o: CMakeFiles/rtsp_trt.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/omar/luna/rtsp_trt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CUDA object CMakeFiles/rtsp_trt.dir/src/crop.cu.o"
+	/usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/rtsp_trt.dir/src/crop.cu.o -MF CMakeFiles/rtsp_trt.dir/src/crop.cu.o.d -x cu -c /home/omar/luna/rtsp_trt/src/crop.cu -o CMakeFiles/rtsp_trt.dir/src/crop.cu.o
+
+CMakeFiles/rtsp_trt.dir/src/crop.cu.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CUDA source to CMakeFiles/rtsp_trt.dir/src/crop.cu.i"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_PREPROCESSED_SOURCE
+
+CMakeFiles/rtsp_trt.dir/src/crop.cu.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CUDA source to assembly CMakeFiles/rtsp_trt.dir/src/crop.cu.s"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_ASSEMBLY_SOURCE
+
 # Object files for target rtsp_trt
 rtsp_trt_OBJECTS = \
 "CMakeFiles/rtsp_trt.dir/src/main.cpp.o" \
 "CMakeFiles/rtsp_trt.dir/src/engine.cpp.o" \
 "CMakeFiles/rtsp_trt.dir/src/stream.cpp.o" \
 "CMakeFiles/rtsp_trt.dir/src/postprocess.cpp.o" \
-"CMakeFiles/rtsp_trt.dir/src/display.cpp.o" \
+"CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.o" \
+"CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.o" \
 "CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o" \
-"CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o"
+"CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o" \
+"CMakeFiles/rtsp_trt.dir/src/crop.cu.o"
 
 # External object files for target rtsp_trt
 rtsp_trt_EXTERNAL_OBJECTS =
@@ -186,70 +217,17 @@ rtsp_trt: CMakeFiles/rtsp_trt.dir/src/main.cpp.o
 rtsp_trt: CMakeFiles/rtsp_trt.dir/src/engine.cpp.o
 rtsp_trt: CMakeFiles/rtsp_trt.dir/src/stream.cpp.o
 rtsp_trt: CMakeFiles/rtsp_trt.dir/src/postprocess.cpp.o
-rtsp_trt: CMakeFiles/rtsp_trt.dir/src/display.cpp.o
+rtsp_trt: CMakeFiles/rtsp_trt.dir/src/bytetrack.cpp.o
+rtsp_trt: CMakeFiles/rtsp_trt.dir/src/pipeline_core.cpp.o
 rtsp_trt: CMakeFiles/rtsp_trt.dir/src/preprocess.cu.o
 rtsp_trt: CMakeFiles/rtsp_trt.dir/src/postprocess_gpu.cu.o
+rtsp_trt: CMakeFiles/rtsp_trt.dir/src/crop.cu.o
 rtsp_trt: CMakeFiles/rtsp_trt.dir/build.make
 rtsp_trt: /usr/local/cuda-12.6/targets/x86_64-linux/lib/libcudart.so
 rtsp_trt: /usr/lib/x86_64-linux-gnu/libnvinfer.so
 rtsp_trt: /usr/lib/x86_64-linux-gnu/libnvinfer_plugin.so
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_stitching.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_alphamat.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_aruco.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_barcode.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_bgsegm.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_bioinspired.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_ccalib.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_cvv.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_dnn_objdetect.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_dnn_superres.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_dpm.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_face.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_freetype.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_fuzzy.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_hdf.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_hfs.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_img_hash.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_intensity_transform.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_line_descriptor.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_mcc.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_quality.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_rapid.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_reg.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_rgbd.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_saliency.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_shape.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_stereo.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_structured_light.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_superres.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_surface_matching.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_tracking.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_videostab.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_viz.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_wechat_qrcode.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_xobjdetect.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_xphoto.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_highgui.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_datasets.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_plot.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_text.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_ml.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_phase_unwrapping.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_optflow.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_ximgproc.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_video.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_videoio.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_objdetect.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_calib3d.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_dnn.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_features2d.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_flann.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_photo.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_imgproc.so.4.6.0
-rtsp_trt: /usr/lib/x86_64-linux-gnu/libopencv_core.so.4.6.0
 rtsp_trt: CMakeFiles/rtsp_trt.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/omar/luna/rtsp_trt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable rtsp_trt"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/omar/luna/rtsp_trt/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable rtsp_trt"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/rtsp_trt.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

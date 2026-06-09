@@ -142,14 +142,8 @@ void Stream::poll_bus() {
     if (!msg) return;
     switch (GST_MESSAGE_TYPE(msg)) {
         case GST_MESSAGE_EOS:
-            if (is_file_ && filesrc_) {
-                gst_element_seek_simple(pipeline_, GST_FORMAT_TIME,
-                    GstSeekFlags(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT), 0);
-                std::cout << "[Stream " << id_ << "] looped\n";
-            } else {
-                std::cerr << "[Stream " << id_ << "] EOS\n";
-                running_ = false;
-            }
+            std::cout << "[Stream " << id_ << "] EOS\n";
+            running_ = false;
             break;
         case GST_MESSAGE_ERROR: {
             GError* err = nullptr; gchar* dbg = nullptr;
