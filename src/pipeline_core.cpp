@@ -63,6 +63,7 @@ static Config load_config(const std::string& path) {
     c.tracker.high_thresh    = tr ? tr["high_thresh"].as<float>(0.50f)  : 0.50f;
     c.tracker.low_thresh     = tr ? tr["low_thresh"].as<float>(0.10f)   : 0.10f;
     c.tracker.match_thresh   = tr ? tr["match_thresh"].as<float>(0.80f) : 0.80f;
+    c.tracker.refind_dist    = tr ? tr["refind_dist"].as<float>(2.5f)   : 2.5f;
     c.tracker.max_age        = tr ? tr["max_age"].as<int>(30)           : 30;
     c.tracker.min_hits       = tr ? tr["min_hits"].as<int>(1)           : 1;
     return c;

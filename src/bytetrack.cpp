@@ -175,6 +175,28 @@ static float track_det_iou(const STrack& t, const Detection& d) {
     return inter / (uni + 1e-7f);
 }
 
+// ── re-find metric (for lost tracks) ──────────────────────────────────────────
+// IoU is too brittle for re-association: any reappearance shift drops it below
+// threshold. Gate on centre distance normalised by box size instead — tolerant of
+// translation, which is exactly what happens when an object leaves and returns.
+
+static float track_det_center_dist(const STrack& t, const Detection& d) {
+    float tcx = t.cx(),               tcy = t.cy();
+    float dcx = d.left + d.width*0.5f, dcy = d.top + d.height*0.5f;
+    float dx = tcx - dcx, dy = tcy - dcy;
+    float radius = 0.25f * (t.width() + t.height());  // ≈ half the box side
+    return std::sqrt(dx*dx + dy*dy) / (radius + 1e-7f);
+}
+
+// Guard against a lost track grabbing a wildly differently-sized detection.
+static bool size_compatible(const STrack& t, const Detection& d) {
+    float ta = t.width() * t.height();
+    float da = d.width   * d.height;
+    if (ta <= 0.f || da <= 0.f) return false;
+    float r = ta > da ? ta / da : da / ta;
+    return r <= 4.0f;   // areas within 4× (≈2× per side)
+}
+
 // ── Hungarian assignment (O(N³) potential method, padded to square) ───────────
 // Returns assignment[r] = c (0-indexed), or -1 if row maps to a padding column.
 
@@ -284,6 +306,42 @@ struct BYTETracker::Impl {
             if (!det_used[c]) u_dets.push_back(det_idx[c]);
     }
 
+    // Re-find lost tracks by centre distance (translation-tolerant). Matched
+    // tracks are reactivated in-place; the rest stay Lost.
+    void match_refind(
+        const std::vector<STrack*>& tracks,
+        const std::vector<Detection>& dets,
+        const std::vector<int>& det_idx,
+        float dist_gate,
+        std::vector<STrack*>& u_tracks,
+        std::vector<int>& u_dets)
+    {
+        u_tracks.clear(); u_dets.clear();
+        int nt = (int)tracks.size(), nd = (int)det_idx.size();
+        if (nt == 0) { u_dets   = det_idx; return; }
+        if (nd == 0) { u_tracks = tracks;  return; }
+
+        std::vector<std::vector<float>> cost(nt, std::vector<float>(nd));
+        for (int r = 0; r < nt; ++r)
+            for (int c = 0; c < nd; ++c)
+                cost[r][c] = track_det_center_dist(*tracks[r], dets[det_idx[c]]);
+
+        auto assign = hungarian(cost, nt, nd);
+        std::vector<bool> det_used(nd, false);
+        for (int r = 0; r < nt; ++r) {
+            int c = assign[r];
+            if (c >= 0 && cost[r][c] <= dist_gate &&
+                size_compatible(*tracks[r], dets[det_idx[c]])) {
+                tracks[r]->update(dets[det_idx[c]], frame_count);
+                det_used[c] = true;
+            } else {
+                u_tracks.push_back(tracks[r]);
+            }
+        }
+        for (int c = 0; c < nd; ++c)
+            if (!det_used[c]) u_dets.push_back(det_idx[c]);
+    }
+
     std::vector<TrackedObject> update(const std::vector<Detection>& dets) {
         ++frame_count;
 
@@ -305,23 +363,29 @@ struct BYTETracker::Impl {
             else                                unconfirmed.push_back(&t);
         }
 
-        // ── Stage 1: (confirmed + lost) ↔ high-conf dets ─────────────────────
-        // Including lost tracks here lets them recover directly when a high-conf
-        // detection re-appears in their region.
+        // ── Stage 1: confirmed ↔ high-conf dets (frame-to-frame IoU) ─────────
+        // Active tracks match first, by IoU, so they keep priority on detections
+        // and don't get hijacked by a stale lost track.
 
-        std::vector<STrack*> pool;
-        pool.insert(pool.end(), confirmed.begin(), confirmed.end());
-        for (auto& t : lost) pool.push_back(&t);
-
-        std::vector<STrack*> u_pool;
-        std::vector<int>     u_hi;
-        match_iou(pool, dets, hi, cfg.match_thresh, u_pool, u_hi);
-
-        // Unmatched confirmed tracks → candidates for stage 2
-        // Unmatched lost tracks stay Lost (state unchanged by predict)
         std::vector<STrack*> u_confirmed;
-        for (STrack* t : u_pool)
-            if (t->state == TrackState::Tracked) u_confirmed.push_back(t);
+        std::vector<int>     u_hi;
+        match_iou(confirmed, dets, hi, cfg.match_thresh, u_confirmed, u_hi);
+
+        // ── Stage 1b: lost ↔ remaining high-conf dets (lenient re-find) ──────
+        // Recover the ID after the object briefly left the frame. IoU is far too
+        // strict here — even a small reappearance shift drops it below threshold —
+        // so gate on normalised centre distance instead. This is what keeps an
+        // object's ID when it leaves and returns near where it was. Matched lost
+        // tracks are reactivated (→ Tracked) and moved back to `tracked` in the
+        // rebuild step below; the rest stay Lost until they expire (max_age).
+        {
+            std::vector<STrack*> lost_ptrs;
+            for (auto& t : lost) lost_ptrs.push_back(&t);
+            std::vector<STrack*> u_lost;
+            std::vector<int>     u_hi2;
+            match_refind(lost_ptrs, dets, u_hi, cfg.refind_dist, u_lost, u_hi2);
+            u_hi = u_hi2;
+        }
 
         // ── Stage 2: unmatched confirmed ↔ low-conf dets ─────────────────────
         {

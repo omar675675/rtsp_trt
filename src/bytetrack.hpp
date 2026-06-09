@@ -18,6 +18,7 @@ public:
         float high_thresh  = 0.50f;  // min conf to enter high-quality detection pool
         float low_thresh   = 0.10f;  // min conf for low-quality pool (stage-2 matching)
         float match_thresh = 0.80f;  // IoU threshold for high-quality matching (stages 1 & 3)
+        float refind_dist  = 2.5f;   // max centre distance (in box-radii) to re-find a lost track
         int   max_age      = 30;     // frames a lost track survives without a match
         int   min_hits     = 1;      // consecutive hits before a track appears in output
     };
